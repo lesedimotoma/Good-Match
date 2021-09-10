@@ -11,7 +11,7 @@ export const match = (name1: string, name2: string ) => {
         const length = splitStr.filter(ch => item === ch).length
         splitStr = splitStr.filter(ch => ch != item)
         return length
-    })
+    }).filter(item => item != 0)
 
     return result
 }

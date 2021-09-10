@@ -5,7 +5,15 @@ export const match = (name1: string, name2: string ) => {
     }
     
     let sentence = name1 + ' matches ' + name2
-    let splitStr = sentence.replace(/s/g, '').split('')
+    let splitStr = sentence.toLowerCase().replace(/\s/g, '').split('')
 
-    return ""
+    let result = splitStr.map(item => {
+        const length = splitStr.filter(ch => item === ch).length
+        splitStr = splitStr.filter(ch => ch != item)
+        return length
+    })
+
+    return result
 }
+
+console.log(match('Jack', 'Jill'))

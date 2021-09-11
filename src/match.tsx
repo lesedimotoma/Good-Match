@@ -1,6 +1,10 @@
 const csv = require('csv-parser')
 import * as fs from 'fs'
 
+/**
+ * Runs the good match algrothim on the names in the csv file and prints the results to a output.txt
+ * @param filename 
+ */
 const readcsv = (filename: string) => {
     let male: string[] = []
     let female: string[] = []
@@ -54,7 +58,7 @@ const addToArray = (arr: string[], word: string) => {
 }
 
 /**
- * 
+ * Calculates match percentage between two names
  * @param name1 
  * @param name2 
  * @returns a sentence mentioning the matched names and their % match 
@@ -117,7 +121,11 @@ const reduceNumber = (resultCount: string[]) => {
     return resultCount
 }
 
-
+/**
+ * Checks validity of a given name
+ * @param word 
+ * @returns a boolean indicating the validity of the name
+ */
 const isValid = (word: any) => {
     let pattern = /^[a-zA-Z]+$/
     return word !== null && 

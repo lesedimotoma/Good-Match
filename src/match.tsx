@@ -1,5 +1,6 @@
 const csv = require('csv-parser')
 import * as fs from 'fs'
+import * as readLine from 'readline'
 
 /**
  * Runs the good match algrothim on the names in the csv file and prints the results to a output.txt
@@ -136,5 +137,19 @@ const isValid = (word: any) => {
             
 }
 
-console.log(isValid(null))
+    const read = readLine.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    })
+    
+    read.question("Enter the two names you want to match: ", input => {
+        const names = input.toString().split(' ')
+        const output = match(names[0], names[1])
+        console.log("Output: ", output)
+
+        read.close()
+    })
+
+
+//console.log(isValid(null))
 //readcsv('data.csv' )

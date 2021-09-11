@@ -22,6 +22,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.match = void 0;
 const csv = require('csv-parser');
 const fs = __importStar(require("fs"));
+const readLine = __importStar(require("readline"));
+/**
+ * Runs the good match algrothim on the names in the csv file and prints the results to a output.txt
+ * @param filename
+ */
 const readcsv = (filename) => {
     let male = [];
     let female = [];
@@ -66,7 +71,7 @@ const addToArray = (arr, word) => {
     return arr;
 };
 /**
- *
+ * Calculates match percentage between two names
  * @param name1
  * @param name2
  * @returns a sentence mentioning the matched names and their % match
@@ -117,6 +122,11 @@ const reduceNumber = (resultCount) => {
     }
     return resultCount;
 };
+/**
+ * Checks validity of a given name
+ * @param word
+ * @returns a boolean indicating the validity of the name
+ */
 const isValid = (word) => {
     let pattern = /^[a-zA-Z]+$/;
     return word !== null &&
@@ -124,6 +134,17 @@ const isValid = (word) => {
         pattern.test(word) &&
         typeof word === 'string';
 };
-console.log(isValid(null));
+const read = readLine.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+read.question("Enter the two names you want to match: ", input => {
+    const names = input.toString().split(' ');
+    console.log("thank you: ", names);
+    const output = (0, exports.match)(names[0], names[1]);
+    console.log("Output: ", output);
+    read.close();
+});
+//console.log(isValid(null))
 //readcsv('data.csv' )
 //# sourceMappingURL=match.js.map

@@ -4,7 +4,8 @@ import * as fs from 'fs'
 const readcsv = (filename: string) => {
     let male: string[] = []
     let female: string[] = []
-    const readstream = fs.createReadStream(__dirname+ '/../../src/'+ filename)
+    let output: string[] = []
+    const readstream = fs.createReadStream(filename)
     readstream.on('open', () => {
         readstream.pipe(csv(['name', 'gender']))
             .on('data', (row: any) => {
@@ -13,23 +14,41 @@ const readcsv = (filename: string) => {
                 }
                 else male = addToArray(male, row.name)
 
-                console.log(male, female)
             })
+            .on('end', () => {
+
+                female.map(f => {
+                    male.map(m => {
+                        output.push(match(f, m))
+
+                    })
+                })
+
+                fs.writeFile('output.txt',output.join('\n') , (err: any) => {
+                    if(err) {
+                        return console.error(err)
+                    }
+                })
+                
+            })
+
     })
        
     readstream.on('error', (err) => {
         console.error(err)
     })
-
-    console.log('female', female)
-    console.log('male', male)
     
 }
 
-
+/**
+ * Appends a specified to a given array on condition that word doesnt already exist in the array 
+ * @param arr 
+ * @param word 
+ * @returns array with the new word appended to it 
+ */
 const addToArray = (arr: string[], word: string) => {
     if(!arr.some(item => item === word)){
-        arr.push(word)
+        arr.push(word.trim())
     }
     return arr
 }
@@ -40,10 +59,11 @@ const addToArray = (arr: string[], word: string) => {
  * @param name2 
  * @returns a sentence mentioning the matched names and their % match 
  */
-export const match = (name1: string, name2: string ) => {
+export const match = (name1: string, name2: string ): string => {
 
-    if ( name1 == null || name2 == null || name1.match(/\s/g) ||  name2.match(/\s/g)  ){
-        return console.error('Invalid input')
+    if ( !isValid(name1) || !isValid(name2) ){
+        console.error('Invalid input')
+        return ''
     }
     
     let sentenceResult = name1 + ' matches ' + name2
@@ -66,7 +86,7 @@ export const match = (name1: string, name2: string ) => {
 
 
 /**
- * 
+ * finds the match percentage of two words
  * @param resultCount 
  * @returns string array containing resulting reduction
  */
@@ -98,4 +118,15 @@ const reduceNumber = (resultCount: string[]) => {
 }
 
 
-readcsv('data.csv' )
+const isValid = (word: any) => {
+    let pattern = /^[a-zA-Z]+$/
+    return word !== null && 
+            word != undefined && 
+            pattern.test(word) &&
+            typeof word === 'string' 
+            
+            
+}
+
+console.log(isValid(null))
+//readcsv('data.csv' )

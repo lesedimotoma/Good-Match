@@ -67,7 +67,7 @@ const addToArray = (arr: string[], word: string) => {
 export const match = (name1: string, name2: string ): string => {
 
     if ( !isValid(name1) || !isValid(name2) ){
-        console.error('Invalid input')
+        console.error('Error: Invalid input')
         return ''
     }
     

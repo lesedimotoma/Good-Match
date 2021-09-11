@@ -78,7 +78,7 @@ const addToArray = (arr, word) => {
  */
 const match = (name1, name2) => {
     if (!isValid(name1) || !isValid(name2)) {
-        console.error('Invalid input');
+        console.error('Error: Invalid input');
         return '';
     }
     let sentenceResult = name1 + ' matches ' + name2;
@@ -140,7 +140,6 @@ const read = readLine.createInterface({
 });
 read.question("Enter the two names you want to match: ", input => {
     const names = input.toString().split(' ');
-    console.log("thank you: ", names);
     const output = (0, exports.match)(names[0], names[1]);
     console.log("Output: ", output);
     read.close();

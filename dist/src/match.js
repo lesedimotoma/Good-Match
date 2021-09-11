@@ -1,14 +1,62 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.match = void 0;
+const csv = require('csv-parser');
+const fs = __importStar(require("fs"));
+const readcsv = (filename) => {
+    let male = [];
+    let female = [];
+    const readstream = fs.createReadStream(__dirname + '/../../src/' + filename);
+    readstream.on('open', () => {
+        readstream.pipe(csv(['name', 'gender']))
+            .on('data', (row) => {
+            if (row.gender.includes('f')) {
+                female = addToArray(female, row.name);
+            }
+            else
+                male = addToArray(male, row.name);
+            console.log(male, female);
+        });
+    });
+    readstream.on('error', (err) => {
+        console.error(err);
+    });
+    console.log('female', female);
+    console.log('male', male);
+};
+const addToArray = (arr, word) => {
+    if (!arr.some(item => item === word)) {
+        arr.push(word);
+    }
+    return arr;
+};
 /**
  *
  * @param name1
  * @param name2
- * @returns
+ * @returns a sentence mentioning the matched names and their % match
  */
 const match = (name1, name2) => {
-    if (name1 === '' || name2 === '') {
+    if (name1 == null || name2 == null || name1.match(/\s/g) || name2.match(/\s/g)) {
         return console.error('Invalid input');
     }
     let sentenceResult = name1 + ' matches ' + name2;
@@ -25,6 +73,11 @@ const match = (name1, name2) => {
     return sentenceResult;
 };
 exports.match = match;
+/**
+ *
+ * @param resultCount
+ * @returns string array containing resulting reduction
+ */
 const reduceNumber = (resultCount) => {
     let length = resultCount.length;
     let result = [];
@@ -47,5 +100,5 @@ const reduceNumber = (resultCount) => {
     }
     return resultCount;
 };
-console.log((0, exports.match)('Jack', 'Jill'));
+readcsv('data.csv');
 //# sourceMappingURL=match.js.map

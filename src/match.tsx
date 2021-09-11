@@ -1,3 +1,39 @@
+const csv = require('csv-parser')
+import * as fs from 'fs'
+
+const readcsv = (filename: string) => {
+    let male: string[] = []
+    let female: string[] = []
+    const readstream = fs.createReadStream(__dirname+ '/../../src/'+ filename)
+    readstream.on('open', () => {
+        readstream.pipe(csv(['name', 'gender']))
+            .on('data', (row: any) => {
+                if(row.gender.includes('f')) {
+                    female = addToArray(female, row.name)
+                }
+                else male = addToArray(male, row.name)
+
+                console.log(male, female)
+            })
+    })
+       
+    readstream.on('error', (err) => {
+        console.error(err)
+    })
+
+    console.log('female', female)
+    console.log('male', male)
+    
+}
+
+
+const addToArray = (arr: string[], word: string) => {
+    if(!arr.some(item => item === word)){
+        arr.push(word)
+    }
+    return arr
+}
+
 /**
  * 
  * @param name1 
@@ -6,7 +42,7 @@
  */
 export const match = (name1: string, name2: string ) => {
 
-    if (name1 === '' || name2 === ''){
+    if ( name1 == null || name2 == null || name1.match(/\s/g) ||  name2.match(/\s/g)  ){
         return console.error('Invalid input')
     }
     
@@ -61,4 +97,5 @@ const reduceNumber = (resultCount: string[]) => {
     return resultCount
 }
 
-console.log(match('Jack', 'Jill'))
+
+readcsv('data.csv' )
